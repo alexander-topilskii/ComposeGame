@@ -5,7 +5,7 @@ plugins {
     id("com.android.library").apply(false)
     id("org.jetbrains.compose").apply(false)
 }
-
-tasks.register("clean", Delete::class) {
-    delete(rootProject.buildDir)
-}
+//
+//tasks.register("clean", Delete::class) {
+//    delete(rootProject.buildDir)
+//}

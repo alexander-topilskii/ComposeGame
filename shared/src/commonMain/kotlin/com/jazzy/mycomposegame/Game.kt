@@ -26,7 +26,7 @@ class Game {
     fun startGame() {
         gameObjects.clear()
 
-        repeat(10) {
+        repeat(1000) {
             val ball = BallData(
                 ballSize = random(25, 45),
                 color = Color(
@@ -36,7 +36,7 @@ class Game {
                 )
             )
 
-            ball.position = Float2()//Float2(width.value / 2.0F, height.value / 2.0F)
+            ball.position = Float2()
             ball.movementVector = Float2(1f, 0f)
             ball.speed = random(0, 8) + 16f
             ball.angle = random(0, 15) + 30f
