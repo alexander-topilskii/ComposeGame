@@ -38,3 +38,8 @@ fun random(min: Int, max: Int): Float {
     return min + Random.nextFloat() * (max - min)
 }
 
+fun random(min: Float = 0f, max: Float): Float {
+    require(min < max) { "Invalid range [$min, $max]" }
+    return min + Random.nextFloat() * (max - min)
+}
+

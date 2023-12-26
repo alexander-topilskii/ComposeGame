@@ -17,6 +17,9 @@ enum class GameState {
 class Game {
     var prevTime = 0L
 
+    var width by mutableStateOf(0.dp)
+    var height by mutableStateOf(0.dp)
+
     var gameObjects = mutableStateListOf<GameObject>()
     var gameState by mutableStateOf(GameState.STOPPED)
     var gameStatus by mutableStateOf("Let's play!")
@@ -25,6 +28,21 @@ class Game {
 
     fun startGame() {
         gameObjects.clear()
+
+        repeat(100) {
+            val ball = BallData(
+                ballSize = random(25, 45),
+                color = Color.DarkGray
+            )
+
+            ball.position =
+                Float2(random(0f, width.value - ball.size), random(0f, height.value - ball.size))
+            ball.movementVector = Float2(0f, 0f)
+            ball.speed = 0f
+            ball.angle = 0f
+
+            gameObjects.add(ball)
+        }
 
         repeat(1000) {
             val ball = BallData(
@@ -81,7 +99,4 @@ class Game {
         gameState = GameState.STOPPED
         gameStatus = "Congratulations!"
     }
-
-    var width by mutableStateOf(0.dp)
-    var height by mutableStateOf(0.dp)
 }

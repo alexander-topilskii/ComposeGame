@@ -30,6 +30,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Compose_Game"
-include(":androidBallApp")
+rootProject.name = "ComposeGame"
+include(":androidGameApp")
 include(":shared")
