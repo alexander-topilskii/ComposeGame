@@ -23,3 +23,15 @@ fun Ball(ballData: BallData) {
             .clickable { ballData.isEnabled = !ballData.isEnabled }
     )
 }
+
+@Composable
+fun Box(boxData: BoxData) {
+    val ballSize = boxData.size.dp
+    Box(
+        Modifier
+            .offset(boxData.xOffset, boxData.yOffset)
+            .size(ballSize)
+            .background(boxData.color)
+            .clickable { boxData.isEnabled = !boxData.isEnabled }
+    )
+}

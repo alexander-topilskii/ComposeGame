@@ -29,22 +29,22 @@ class Game {
     fun startGame() {
         gameObjects.clear()
 
-        repeat(100) {
-            val ball = BallData(
+        repeat(10) {
+            val box = BoxData(
                 ballSize = random(25, 45),
                 color = Color.DarkGray
             )
 
-            ball.position =
-                Float2(random(0f, width.value - ball.size), random(0f, height.value - ball.size))
-            ball.movementVector = Float2(0f, 0f)
-            ball.speed = 0f
-            ball.angle = 0f
+            box.position =
+                Float2(random(0f, width.value - box.size), random(0f, height.value - box.size))
+            box.movementVector = Float2(0f, 0f)
+            box.speed = 0f
+            box.angle = 0f
 
-            gameObjects.add(ball)
+            gameObjects.add(box)
         }
 
-        repeat(1000) {
+        repeat(10) {
             val ball = BallData(
                 ballSize = random(25, 45),
                 color = Color(

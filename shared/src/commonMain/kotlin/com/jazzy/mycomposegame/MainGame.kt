@@ -84,6 +84,7 @@ fun MainGame() {
                 game.gameObjects.forEach {
                     when (it) {
                         is BallData -> Ball(it)
+                        is BoxData -> Box(it)
                     }
                 }
             }

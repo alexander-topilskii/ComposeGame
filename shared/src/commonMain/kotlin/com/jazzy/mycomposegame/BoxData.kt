@@ -4,11 +4,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import dev.romainguy.kotlin.math.Float2
 
-class BallData(
+class BoxData(
     ballSize: Float = 20f,
     val color: Color = Color.Red,
-) :
-    GameObject() {
+) : GameObject() {
     override var size: Float = ballSize
     override fun update(realDelta: Float, game: Game) {
 

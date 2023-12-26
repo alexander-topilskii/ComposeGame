@@ -10,7 +10,8 @@ import dev.romainguy.kotlin.math.length
 abstract class GameObject(
     speed: Float = 0.0F,
     angle: Float = 0.0F,
-    position: Float2 = Float2()
+    position: Float2 = Float2(),
+    var isEnabled: Boolean = true
 ) {
     companion object {
         val UNIT_X = Float2(1.0f, 0.0f)
