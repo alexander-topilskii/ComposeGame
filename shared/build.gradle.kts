@@ -1,3 +1,5 @@
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
@@ -31,12 +33,18 @@ kotlin {
 
         val commonMain by getting {
             dependencies {
+                // compose
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
-                implementation ("dev.romainguy:kotlin-math:1.5.3")
+
+                // math
+                implementation(libs.kotlin.math)
+
+                // MVI
+                implementation(libs.arkivanov.mvikotlin)
             }
         }
 
@@ -52,13 +60,17 @@ kotlin {
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+
+            // MVI
+            implementation(libs.arkivanov.mvikotlin)
+            implementation(libs.arkivanov.mvikotlin.main)
         }
     }
 }
 
 android {
-    namespace = "com.jazzy.mycomposegame"
-    compileSdk = 33
+    namespace = libs.versions.namespace.get()
+    compileSdk = 34
     defaultConfig {
         minSdk = 26
         targetSdk = 33
@@ -67,11 +79,11 @@ android {
 
 compose.desktop {
     application {
-        mainClass = "com.jazzy.mycomposegame.MainKt"
+        mainClass = libs.versions.namespace.get() + ".MainKt"
 
         nativeDistributions {
-            targetFormats(org.jetbrains.compose.desktop.application.dsl.TargetFormat.Dmg, org.jetbrains.compose.desktop.application.dsl.TargetFormat.Msi, org.jetbrains.compose.desktop.application.dsl.TargetFormat.Deb)
-            packageName = "com.jazzy.mycomposegame"
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = libs.versions.namespace.get()
             packageVersion = "1.0.0"
         }
     }
