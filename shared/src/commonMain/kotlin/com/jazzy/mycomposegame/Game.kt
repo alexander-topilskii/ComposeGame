@@ -6,7 +6,9 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.unit.dp
+import com.jazzy.mycomposegame.input.KeyHandler
 import dev.romainguy.kotlin.math.Float2
 import kotlin.random.Random
 
@@ -15,6 +17,14 @@ enum class GameState {
 }
 
 class Game {
+    val keyHandler = KeyHandler().apply {
+        val moveSpeed = 1f
+        onMoveUp = { player.movementVector = Float2(0f, -moveSpeed) }
+        onMoveDown = { player.movementVector = Float2(0f, moveSpeed) }
+        onMoveLeft = { player.movementVector = Float2(-moveSpeed, 0f) }
+        onMoveRight = { player.movementVector = Float2(moveSpeed, 0f) }
+        onSpace = { /* Логика прыжка, если необходима */ }
+    }
     var prevTime = 0L
 
     var width by mutableStateOf(0.dp)
@@ -24,10 +34,19 @@ class Game {
     var gameState by mutableStateOf(GameState.STOPPED)
     var gameStatus by mutableStateOf("Let's play!")
     var totalTime by mutableStateOf(0L)
+    private var player = PlayerData(color = Color.Green)
 
 
     fun startGame() {
         gameObjects.clear()
+
+        player.apply {
+            position = Float2(
+                width.value / 2f,
+                height.value / 2f
+            )
+        }
+        gameObjects.add(player)
 
         repeat(10) {
             val box = BoxData(
@@ -98,5 +117,9 @@ class Game {
     fun winGame() {
         gameState = GameState.STOPPED
         gameStatus = "Congratulations!"
+    }
+
+    fun onKeyPressed(keyCode: KeyEvent) {
+        keyHandler.onKeyPressed(keyCode)
     }
 }

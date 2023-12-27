@@ -19,6 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
@@ -36,7 +39,16 @@ fun MainGame() {
         }
     }
 
-    Column(modifier = Modifier.background(Color(51, 153, 255)).fillMaxHeight().fillMaxWidth()) {
+    Column(modifier = Modifier
+        .background(Color(51, 153, 255))
+        .fillMaxHeight()
+        .fillMaxWidth()
+        .onKeyEvent { keyEvent: KeyEvent ->
+            game.onKeyPressed(keyEvent)
+            return@onKeyEvent false
+        }
+
+    ) {
         Row(modifier = Modifier.align(Alignment.CenterHorizontally).fillMaxWidth()) {
             Button({
                 if (game.gameState == GameState.STOPPED)
@@ -57,7 +69,6 @@ fun MainGame() {
                 modifier = Modifier.align(Alignment.CenterVertically).padding(horizontal = 16.dp),
                 color = Color.White
             )
-
         }
 
 
@@ -85,6 +96,7 @@ fun MainGame() {
                     when (it) {
                         is BallData -> Ball(it)
                         is BoxData -> Box(it)
+                        is PlayerData -> Player(it)
                     }
                 }
             }

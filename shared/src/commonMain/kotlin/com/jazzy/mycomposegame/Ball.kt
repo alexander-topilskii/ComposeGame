@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,5 +34,18 @@ fun Box(boxData: BoxData) {
             .size(ballSize)
             .background(boxData.color)
             .clickable { boxData.isEnabled = !boxData.isEnabled }
+    )
+}
+
+@Composable
+fun Player(player: PlayerData) {
+    val ballSize = player.size.dp
+    Box(
+        Modifier
+            .offset(player.xOffset, player.yOffset)
+            .size(ballSize)
+            .clip(CutCornerShape(10))
+            .background(player.color)
+            .clickable { player.isEnabled = !player.isEnabled }
     )
 }
