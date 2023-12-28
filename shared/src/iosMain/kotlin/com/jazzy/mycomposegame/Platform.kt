@@ -1,5 +1,6 @@
 package com.jazzy.mycomposegame
 
+import androidx.compose.runtime.Composable
 import platform.UIKit.UIDevice
 
 class IOSPlatform: Platform {
@@ -7,3 +8,8 @@ class IOSPlatform: Platform {
 }
 
 actual fun getPlatform(): Platform = IOSPlatform()
+
+@Composable
+actual fun getScreenSize():  Pair<Int, Int> {
+    return 1 to 1;
+}

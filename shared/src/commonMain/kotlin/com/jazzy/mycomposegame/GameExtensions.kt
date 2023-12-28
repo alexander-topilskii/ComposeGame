@@ -34,12 +34,12 @@ fun Float2.rotate(degrees: Float, origin: Float2 = Float2()): Float2 {
 }
 
 fun random(min: Int, max: Int): Float {
-    require(min < max) { "Invalid range [$min, $max]" }
+//    require(min <= max) { "Invalid range [$min, $max]" }
     return min + Random.nextFloat() * (max - min)
 }
 
 fun random(min: Float = 0f, max: Float): Float {
-    require(min < max) { "Invalid range [$min, $max]" }
+//    require(min <= max) { "Invalid range [$min, $max]" }
     return min + Random.nextFloat() * (max - min)
 }
 

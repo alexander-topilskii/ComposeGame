@@ -1,9 +1,12 @@
 package com.jazzy.mycomposegame.ui
 
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
+import com.jazzy.mycomposegame.GameObject
 import com.jazzy.mycomposegame.database.GameDatabase
 import com.jazzy.mycomposegame.domain.ExecutorImpl
 import com.jazzy.mycomposegame.domain.GameStore
@@ -15,13 +18,14 @@ internal class GameStoreFactory(
     private val database: GameDatabase<Any>,
     private val mainContext: CoroutineContext,
     private val ioContext: CoroutineContext,
+    private val screenSize: Pair<Dp, Dp>
 ) {
 
     fun create(): GameStore =
         object : GameStore, Store<GameStore.Intent, GameStore.State, Nothing> by storeFactory.create(
             name = "GameStore",
             initialState = GameStore.State(),
-            bootstrapper = SimpleBootstrapper(Action.Init),
+            bootstrapper = SimpleBootstrapper(Action.Init(screenSize.first, screenSize.second)),
             executorFactory = { ExecutorImpl(database, mainContext, ioContext) },
             reducer = ReducerImpl,
         ) {
@@ -29,15 +33,14 @@ internal class GameStoreFactory(
         }
 
     sealed interface Action : JvmSerializable {
-        object Init : Action
-        data class SaveItem(val id: String) : Action
+        data class Init(val width: Dp, val height: Dp) : Action
     }
 
     sealed interface Msg : JvmSerializable {
+        data class ChangeScreenParams(val width: Dp, val height: Dp): Msg
         data class ChangeTitleText(val newText: String): Msg
-        data class Loaded(val newText: String) : Msg
+        data class GameObjectCreated(val gameObject: GameObject): Msg
     }
-
 }
 
 

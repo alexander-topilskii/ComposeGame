@@ -68,6 +68,8 @@ kotlin {
             // MVI
             implementation(libs.arkivanov.mvikotlin)
             implementation(libs.arkivanov.mvikotlin.main)
+            implementation(libs.arkivanov.mvikotlin.timetravel)
+            implementation(libs.arkivanov.mvikotlin.logging)
         }
     }
 }

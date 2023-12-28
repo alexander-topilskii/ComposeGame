@@ -1,16 +1,17 @@
 package com.jazzy.mycomposegame.ui
 
+import androidx.compose.ui.unit.Dp
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.states
 import com.jazzy.mycomposegame.database.GameDatabase
 import com.jazzy.mycomposegame.domain.GameStore
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class GameArchElementsController(
     storeFactory: StoreFactory,
     database: GameDatabase<Any>,
-  val  dispatchers: GameDispatchers,
+    screenSize: Pair<Dp, Dp>,
+    val dispatchers: GameDispatchers
 ) {
 
     private val gameStore = GameStoreFactory(
@@ -18,21 +19,21 @@ class GameArchElementsController(
         database = database,
         mainContext = dispatchers.main,
         ioContext = dispatchers.io,
+        screenSize = screenSize
     ).create()
 
-    internal val state: Flow<GameUi.ModelUi> = gameStore
-        .states
-        .map { GameUi.ModelUi(
-            GameUi.ModelUi.ChangeableTextUi(it.text),
-            GameUi.ModelUi.Item("ui id", "text")
-        ) }
+    internal val state: Flow<GameStore.State> = gameStore.states
 
     fun onButtonClicked() {
-         gameStore.accept(GameStore.Intent.AddToState("time"))
+
     }
 
     fun onTextChanged(newText: String) {
-        gameStore.accept(GameStore.Intent.TextChanged(newText))
+        gameStore.accept(GameStore.Intent.ChangeText(newText))
+    }
+
+    fun onDensityChanged(width: Dp, height: Dp) {
+        gameStore.accept(GameStore.Intent.ChangeDensity(width, height))
     }
 }
 

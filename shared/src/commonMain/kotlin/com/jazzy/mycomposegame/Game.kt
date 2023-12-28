@@ -10,6 +10,7 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.unit.dp
 import com.jazzy.mycomposegame.input.KeyHandler
 import dev.romainguy.kotlin.math.Float2
+import kotlin.math.abs
 import kotlin.random.Random
 
 enum class GameState {
@@ -55,7 +56,10 @@ class Game {
             )
 
             box.position =
-                Float2(random(0f, width.value - box.size), random(0f, height.value - box.size))
+                Float2(
+                    random(0f, abs(width.value - box.size)),
+                    random(0f, abs(height.value - box.size))
+                )
             box.movementVector = Float2(0f, 0f)
             box.speed = 0f
             box.angle = 0f

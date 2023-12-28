@@ -56,7 +56,7 @@ fun MainGame2() {
                 else
                     game.endGame()
             }) {
-                Text(if(game.gameState == GameState.STOPPED) "Play" else "Stop")
+                Text(if (game.gameState == GameState.STOPPED) "Play" else "Stop")
             }
             Text(
                 game.gameStatus,
@@ -71,14 +71,14 @@ fun MainGame2() {
             )
         }
 
-
-        Box(modifier = Modifier
-            .background(Color.DarkGray)
-            .padding(50.dp)
-            .border(BorderStroke(2.dp, Color.Red))
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .clipToBounds()
+        Box(
+            modifier = Modifier
+                .background(Color.DarkGray)
+                .padding(50.dp)
+                .border(BorderStroke(2.dp, Color.Red))
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .clipToBounds()
         ) {
 
             Box(modifier = Modifier
@@ -100,7 +100,6 @@ fun MainGame2() {
                     }
                 }
             }
-
         }
 
     }

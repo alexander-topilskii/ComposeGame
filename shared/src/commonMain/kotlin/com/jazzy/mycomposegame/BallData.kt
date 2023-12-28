@@ -7,11 +7,10 @@ import dev.romainguy.kotlin.math.Float2
 class BallData(
     ballSize: Float = 20f,
     val color: Color = Color.Red,
-) :
-    GameObject() {
     override var size: Float = ballSize
-    override fun update(realDelta: Float, game: Game) {
+) : GameObject() {
 
+    override fun update(realDelta: Float, game: Game) {
         if (!isEnabled) return
 
         super.update(realDelta, game)
