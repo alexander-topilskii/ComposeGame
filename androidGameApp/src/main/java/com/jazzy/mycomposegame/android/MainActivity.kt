@@ -3,34 +3,32 @@ package com.jazzy.mycomposegame.android
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.jazzy.mycomposegame.App
-import com.jazzy.mycomposegame.Greeting
+import com.jazzy.mycomposegame.database.MemoryTodoDatabase
+import com.jazzy.mycomposegame.ui.GameDispatchers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             MyApplicationTheme {
-                App()
+                App(
+                    DefaultStoreFactory(),
+                    MemoryTodoDatabase(),
+                    DefaultDispatchers
+                )
             }
         }
     }
 }
 
-@Composable
-fun GreetingView(text: String) {
-    Text(text = text)
-}
+object DefaultDispatchers : GameDispatchers {
 
-@Preview
-@Composable
-fun DefaultPreview() {
-    MyApplicationTheme {
-        GreetingView("Hello, Android!")
-    }
+    override val main: CoroutineDispatcher get() = Dispatchers.Main.immediate
+    override val io: CoroutineDispatcher get() = Dispatchers.IO
+    override val unconfined: CoroutineDispatcher get() = Dispatchers.Unconfined
 }

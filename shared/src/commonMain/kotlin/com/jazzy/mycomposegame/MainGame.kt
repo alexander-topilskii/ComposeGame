@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import kotlin.math.roundToInt
 
 @Composable
-fun MainGame() {
+fun MainGame2() {
     val game = remember { Game() }
     val density = LocalDensity.current
     LaunchedEffect(Unit) {
