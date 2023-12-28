@@ -12,6 +12,7 @@ import com.jazzy.mycomposegame.GameObject
 import com.jazzy.mycomposegame.GameState
 import com.jazzy.mycomposegame.database.GameDatabase
 import com.jazzy.mycomposegame.domain.GameStore.*
+import com.jazzy.mycomposegame.getCurrentThread
 import com.jazzy.mycomposegame.random
 import com.jazzy.mycomposegame.ui.GameStoreFactory.Action
 import com.jazzy.mycomposegame.ui.GameStoreFactory.Msg
@@ -23,7 +24,7 @@ import kotlin.random.Random
 
 internal class ExecutorImpl(
     val database: GameDatabase<Any>,
-    mainContext: CoroutineContext,
+    private val mainContext: CoroutineContext,
     private val ioContext: CoroutineContext
 ) : CoroutineExecutor<Intent, Action, State, Msg, Nothing>(mainContext) {
 
@@ -38,8 +39,6 @@ internal class ExecutorImpl(
             dispatch(Msg.ChangeScreenParams(width = width, height = height))
 
             withContext(ioContext) {
-                database.getAll()// TODO : DELETE ME
-
                 val screenWidth = state().screenSize.width.value
                 val screenHeight = state().screenSize.height.value
 
@@ -48,16 +47,18 @@ internal class ExecutorImpl(
                         ballSize = random(25, 45),
                         color = Color.DarkGray
                     ).apply {
-                        position = Float2(random(0f, screenWidth - size), random(0f, screenHeight - size))
+                        position =
+                            Float2(random(0f, screenWidth - size), random(0f, screenHeight - size))
                         movementVector = Float2(0f, 0f)
                         speed = 0f
                         angle = 0f
                     }
-
-                    dispatch(Msg.GameObjectCreated(box))
+                    withContext(mainContext) {
+                        dispatch(Msg.GameObjectCreated(box))
+                    }
                 }
 
-                repeat(10) {
+                repeat(1000) {
                     val ball = BallData(
                         ballSize = random(25, 45),
                         color = Color(
@@ -71,8 +72,9 @@ internal class ExecutorImpl(
                     ball.movementVector = Float2(1f, 0f)
                     ball.speed = random(0, 8) + 16f
                     ball.angle = random(0, 15) + 30f
-
-                    dispatch(Msg.GameObjectCreated(ball))
+                    withContext(mainContext) {
+                        dispatch(Msg.GameObjectCreated(ball))
+                    }
                 }
             }
         }
@@ -80,18 +82,21 @@ internal class ExecutorImpl(
 
     override fun executeIntent(intent: Intent) {
         when (intent) {
-            is Intent.ChangeText -> {
-                dispatch(Msg.ChangeTitleText(newText = intent.newText))
-            }
+            is Intent.ChangeText -> dispatch(Msg.ChangeTitleText(newText = intent.newText))
+            is Intent.ChangeDensity -> dispatch(
+                Msg.ChangeScreenParams(
+                    width = intent.width,
+                    height = intent.height
+                )
+            )
 
-            is Intent.ChangeDensity -> {
-                dispatch(Msg.ChangeScreenParams(width = intent.width, height = intent.height))
+            is Intent.TimerUpdate -> scope.launch(ioContext) {
+                Updater.update(
+                    intent.dt,
+                    state().gameObjects,
+                    state().screenSize
+                )
             }
-
-            is Intent.TimerUpdate -> {
-                Updater.update(intent.dt, state().gameObjects, state().screenSize)
-            }
-
         }
     }
 }
@@ -109,10 +114,7 @@ object Updater {
             gameObject.update(floatDelta, screenSize)
         }
 
-        val allDisabled = gameObjects.filterIsInstance<BallData>().all {
-            !it.isEnabled
-        }
-
         totalTime += delta
     }
 }
+

@@ -10,3 +10,5 @@ expect fun getPlatform(): Platform
 
 @Composable
 expect fun getScreenSize(): Pair<Int, Int>
+
+expect fun getCurrentThread() :String

@@ -13,3 +13,5 @@ actual fun getPlatform(): Platform = IOSPlatform()
 actual fun getScreenSize():  Pair<Int, Int> {
     return 1 to 1;
 }
+
+actual fun getCurrentThread(): String = "not implemented"

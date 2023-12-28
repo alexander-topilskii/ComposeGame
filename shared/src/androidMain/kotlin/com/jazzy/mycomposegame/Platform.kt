@@ -16,3 +16,5 @@ actual fun getScreenSize(): Pair<Int, Int> {
     val screenHeight: Int = configuration.screenHeightDp
     return screenWidth to screenHeight;
 }
+
+actual fun getCurrentThread(): String = "not implemented"
