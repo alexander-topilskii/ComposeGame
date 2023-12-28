@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
@@ -46,6 +48,14 @@ fun MainGame(
             screenSize = with(density) { screenSize.first.toDp() to screenSize.second.toDp() },
             dispatchers = dispatchers
         )
+    }
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            withFrameNanos { time ->
+                controller.onTimerUpdated(time)
+            }
+        }
     }
 
     val states = controller.state.collectAsState(null)

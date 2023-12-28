@@ -3,6 +3,7 @@ package com.jazzy.mycomposegame
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.jazzy.mycomposegame.domain.ScreenSize
 import dev.romainguy.kotlin.math.Float2
 import dev.romainguy.kotlin.math.length
 
@@ -28,7 +29,7 @@ abstract class GameObject(
         }
     abstract val size: Float // Diameter
 
-    open fun update(realDelta: Float, game: Game) {
+    open fun update(realDelta: Float, screenSize: ScreenSize) {
         val obj = this
         val velocity = movementVector.times(realDelta)
         obj.position = obj.position.plus(velocity)

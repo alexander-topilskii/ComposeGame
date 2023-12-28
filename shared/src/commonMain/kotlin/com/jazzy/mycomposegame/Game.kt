@@ -8,6 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.unit.dp
+import com.jazzy.mycomposegame.domain.ScreenSize
 import com.jazzy.mycomposegame.input.KeyHandler
 import dev.romainguy.kotlin.math.Float2
 import kotlin.math.abs
@@ -98,7 +99,7 @@ class Game {
         if (gameState == GameState.STOPPED) return
 
         for (gameObject in gameObjects) {
-            gameObject.update(floatDelta, this)
+            gameObject.update(floatDelta, ScreenSize())
         }
 
         val allDisabled = gameObjects.filterIsInstance<BallData>().all {

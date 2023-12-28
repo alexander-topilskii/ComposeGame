@@ -28,6 +28,10 @@ class GameArchElementsController(
 
     }
 
+    fun onTimerUpdated(time: Long) {
+        gameStore.accept(GameStore.Intent.TimerUpdate(time))
+    }
+
     fun onTextChanged(newText: String) {
         gameStore.accept(GameStore.Intent.ChangeText(newText))
     }

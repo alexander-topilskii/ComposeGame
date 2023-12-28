@@ -11,6 +11,11 @@ internal object ReducerImpl : Reducer<GameStore.State, GameStoreFactory.Msg> {
         when (msg) {
             is ChangeTitleText -> copy(text = msg.newText)
             is GameObjectCreated -> copy(gameObjects = gameObjects + msg.gameObject)
-            is ChangeScreenParams -> copy(width = msg.width, height = msg.height)
+            is ChangeScreenParams -> copy(
+                screenSize = screenSize.copy(
+                    width = msg.width,
+                    height = msg.height
+                )
+            )
         }
 }
