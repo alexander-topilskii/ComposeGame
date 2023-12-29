@@ -1,26 +1,20 @@
 package com.jazzy.mycomposegame.domain
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.jazzy.mycomposegame.BallData
 import com.jazzy.mycomposegame.BoxData
-import com.jazzy.mycomposegame.GameObject
-import com.jazzy.mycomposegame.GameState
+import com.jazzy.mycomposegame.GameUnitBallData
+import com.jazzy.mycomposegame.angle
 import com.jazzy.mycomposegame.database.GameDatabase
 import com.jazzy.mycomposegame.domain.GameStore.*
-import com.jazzy.mycomposegame.getCurrentThread
 import com.jazzy.mycomposegame.random
 import com.jazzy.mycomposegame.ui.GameStoreFactory.Action
 import com.jazzy.mycomposegame.ui.GameStoreFactory.Msg
 import dev.romainguy.kotlin.math.Float2
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.withContext
-import kotlin.random.Random
+import kotlin.coroutines.CoroutineContext
 
 internal class ExecutorImpl(
     val database: GameDatabase<Any>,
@@ -58,24 +52,22 @@ internal class ExecutorImpl(
                     }
                 }
 
-                repeat(1000) {
-                    val ball = BallData(
-                        ballSize = random(25, 45),
-                        color = Color(
-                            red = Random.nextFloat(),
-                            green = Random.nextFloat(),
-                            blue = Random.nextFloat()
+                scope.launch(ioContext) {
+                    repeat(1000) {
+                        val ball = GameUnitBallData(
+                            size = random(25, 45),
+                            color = Color.Blue,
+                            position = Float2(random(0f, 1000f), random(0f, 1000f)),
+                            speed = random(0, 8) + 16f,
+                            angle = random(0, 15) + 30f
                         )
-                    )
 
-                    ball.position = Float2()
-                    ball.movementVector = Float2(1f, 0f)
-                    ball.speed = random(0, 8) + 16f
-                    ball.angle = random(0, 15) + 30f
-                    withContext(mainContext) {
-                        dispatch(Msg.GameObjectCreated(ball))
+                        withContext(mainContext) {
+                            dispatch(Msg.GameUnitCreated(ball))
+                        }
                     }
                 }
+
             }
         }
     }
@@ -90,31 +82,24 @@ internal class ExecutorImpl(
                 )
             )
 
-            is Intent.TimerUpdate -> scope.launch(ioContext) {
-                Updater.update(
-                    intent.dt,
-                    state().gameObjects,
-                    state().screenSize
-                )
+            is Intent.TimerUpdate -> {
+                scope.launch(ioContext) {
+                    Updater.update(
+                        intent.dt,
+                        state().gameObjects,
+                        state().screenSize
+                    )
+                }
+
+                scope.launch(ioContext) {
+                    val newGameUnits =
+                        Updater.getUpdatedUnits(intent.dt, state().gameUnits, state().screenSize)
+                    withContext(mainContext) {
+                        dispatch(Msg.GameUnitsUpdated(newGameUnits))
+                    }
+                }
             }
         }
-    }
-}
-
-object Updater {
-    private var totalTime by mutableStateOf(0L)
-    private var prevTime = 0L
-
-    fun update(time: Long, gameObjects: List<GameObject>, screenSize: ScreenSize) {
-        val delta = time - prevTime
-        val floatDelta = (delta / 1E8).toFloat()
-        prevTime = time
-
-        for (gameObject in gameObjects) {
-            gameObject.update(floatDelta, screenSize)
-        }
-
-        totalTime += delta
     }
 }
 

@@ -13,6 +13,9 @@ import kotlin.random.Random
 val GameObject.xOffset: Dp get() = position.x.dp
 val GameObject.yOffset: Dp get() = position.y.dp
 
+val GameUnit.xOffset: Dp get() = position.x.dp
+val GameUnit.yOffset: Dp get() = position.y.dp
+
 inline val Float.asRadians: Float get() = this * 0.017453292f
 inline val Float.asDegrees: Float get() = this * 57.29578f
 

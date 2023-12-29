@@ -68,23 +68,6 @@ class Game {
             gameObjects.add(box)
         }
 
-        repeat(10) {
-            val ball = BallData(
-                ballSize = random(25, 45),
-                color = Color(
-                    red = Random.nextFloat(),
-                    green = Random.nextFloat(),
-                    blue = Random.nextFloat()
-                )
-            )
-
-            ball.position = Float2()
-            ball.movementVector = Float2(1f, 0f)
-            ball.speed = random(0, 8) + 16f
-            ball.angle = random(0, 15) + 30f
-
-            gameObjects.add(ball)
-        }
 
         gameState = GameState.RUNNING
         gameStatus = "Good luck!"
@@ -100,14 +83,6 @@ class Game {
 
         for (gameObject in gameObjects) {
             gameObject.update(floatDelta, ScreenSize())
-        }
-
-        val allDisabled = gameObjects.filterIsInstance<BallData>().all {
-            !it.isEnabled
-        }
-
-        if (allDisabled && gameState == GameState.RUNNING) {
-            winGame()
         }
 
         totalTime += delta

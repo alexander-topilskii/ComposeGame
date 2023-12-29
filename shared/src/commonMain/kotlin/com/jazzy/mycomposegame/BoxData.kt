@@ -27,5 +27,4 @@ class BoxData(
             if (yOffset > screenSize.height - size.dp) position.y = screenSize.height.value - size
         }
     }
-
 }

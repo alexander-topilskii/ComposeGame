@@ -22,10 +22,10 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import com.jazzy.mycomposegame.Ball
 import com.jazzy.mycomposegame.Box
-import com.jazzy.mycomposegame.BallData
 import com.jazzy.mycomposegame.BoxData
+import com.jazzy.mycomposegame.GameUnitBallData
+import com.jazzy.mycomposegame.GameUnitBallDisplay
 import com.jazzy.mycomposegame.Player
 import com.jazzy.mycomposegame.PlayerData
 import com.jazzy.mycomposegame.database.GameDatabase
@@ -94,9 +94,13 @@ fun MainGame(
                 }) {
                 states.value?.gameObjects?.forEach { gameObject ->
                     when (gameObject) {
-                        is BallData -> Ball(gameObject)
                         is BoxData -> Box(gameObject)
                         is PlayerData -> Player(gameObject)
+                    }
+                }
+                states.value?.gameUnits?.forEach { gameUnit ->
+                    when (gameUnit) {
+                        is GameUnitBallData -> GameUnitBallDisplay(gameUnit)
                     }
                 }
             }

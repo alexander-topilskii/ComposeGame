@@ -3,10 +3,11 @@ package com.jazzy.mycomposegame
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import com.jazzy.mycomposegame.domain.ScreenSize
 import dev.romainguy.kotlin.math.Float2
 import dev.romainguy.kotlin.math.length
-
 
 abstract class GameObject(
     speed: Float = 0.0F,
@@ -35,3 +36,27 @@ abstract class GameObject(
         obj.position = obj.position.plus(velocity)
     }
 }
+
+abstract class GameUnit() {
+    abstract val speed: Float
+    abstract val angle: Float
+    abstract val position: Float2
+    abstract val isEnabled: Boolean
+    abstract val size: Float
+
+    companion object {
+        val UNIT_X = Float2(1.0f, 0.0f)
+    }
+
+    val movementVector
+        get() = (UNIT_X.times(speed)).rotate(angle)
+}
+
+data class GameUnitBallData(
+    override val speed: Float,
+    override val angle: Float,
+    override val position: Float2,
+    override val size: Float,
+    override val isEnabled: Boolean = true,
+    val color: Color = Color.Red,
+) : GameUnit()
