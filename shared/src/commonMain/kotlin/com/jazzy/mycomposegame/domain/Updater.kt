@@ -1,50 +1,36 @@
 package com.jazzy.mycomposegame.domain
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
-import com.jazzy.mycomposegame.GameObject
-import com.jazzy.mycomposegame.GameUnit
-import com.jazzy.mycomposegame.GameUnitBallData
+import com.jazzy.mycomposegame.domain.data.GameUnit
 import com.jazzy.mycomposegame.angle
+import com.jazzy.mycomposegame.domain.data.GameUnitBallData
 import dev.romainguy.kotlin.math.Float2
 import dev.romainguy.kotlin.math.length
 
 object Updater {
     private var totalTime = 0L
-    private var totalTime2 = 0L
     private var prevTime = 0L
-    private var prevTime2 = 0L
 
-    fun update(time: Long, gameObjects: List<GameObject>, screenSize: ScreenSize) {
+    fun update(time: Long, onTic: (Float)-> Unit) {
         val delta = time - prevTime
         val floatDelta = (delta / 1E8).toFloat()
         prevTime = time
 
-        for (gameObject in gameObjects) {
-            gameObject.update(floatDelta, screenSize)
-        }
+        onTic.invoke(floatDelta)
 
         totalTime += delta
     }
 
     fun getUpdatedUnits(
-        time: Long,
+        dt: Float,
         gameUnits: List<GameUnit>,
         screenSize: ScreenSize
     ): List<GameUnit> {
-        val delta = time - prevTime2
-        val floatDelta = (delta / 1E8).toFloat()
-        prevTime2 = time
-
         return gameUnits.map { gu ->
             return@map when (gu) {
-                is GameUnitBallData -> gu.getUpdatedBallData(floatDelta, screenSize)
+                is GameUnitBallData -> gu.getUpdatedBallData(dt, screenSize)
                 else -> gu
             }
-        }.also {
-            totalTime2 += delta
         }
     }
 

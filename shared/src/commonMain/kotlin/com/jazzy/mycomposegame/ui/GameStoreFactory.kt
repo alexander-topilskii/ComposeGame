@@ -1,13 +1,11 @@
 package com.jazzy.mycomposegame.ui
 
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
-import com.jazzy.mycomposegame.GameObject
-import com.jazzy.mycomposegame.GameUnit
+import com.jazzy.mycomposegame.domain.data.GameUnit
 import com.jazzy.mycomposegame.database.GameDatabase
 import com.jazzy.mycomposegame.domain.ExecutorImpl
 import com.jazzy.mycomposegame.domain.GameStore
@@ -35,12 +33,12 @@ internal class GameStoreFactory(
 
     sealed interface Action : JvmSerializable {
         data class Init(val width: Dp, val height: Dp) : Action
+        data class TimerUpdated(val dt: Float) : Action
     }
 
     sealed interface Msg : JvmSerializable {
         data class ChangeScreenParams(val width: Dp, val height: Dp): Msg
         data class ChangeTitleText(val newText: String): Msg
-        data class GameObjectCreated(val gameObject: GameObject): Msg
         data class GameUnitCreated(val gameUnit: GameUnit): Msg
         data class GameUnitsUpdated(val gameUnits: List<GameUnit>): Msg
     }

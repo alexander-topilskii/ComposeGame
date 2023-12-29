@@ -22,13 +22,9 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import com.jazzy.mycomposegame.Box
-import com.jazzy.mycomposegame.BoxData
-import com.jazzy.mycomposegame.GameUnitBallData
-import com.jazzy.mycomposegame.GameUnitBallDisplay
-import com.jazzy.mycomposegame.Player
-import com.jazzy.mycomposegame.PlayerData
+import com.jazzy.mycomposegame.ui.display.GameUnitBallDisplay
 import com.jazzy.mycomposegame.database.GameDatabase
+import com.jazzy.mycomposegame.domain.data.GameUnitBallData
 import com.jazzy.mycomposegame.getScreenSize
 import com.jazzy.mycomposegame.ui.display.display
 
@@ -92,12 +88,6 @@ fun MainGame(
                         )
                     }
                 }) {
-                states.value?.gameObjects?.forEach { gameObject ->
-                    when (gameObject) {
-                        is BoxData -> Box(gameObject)
-                        is PlayerData -> Player(gameObject)
-                    }
-                }
                 states.value?.gameUnits?.forEach { gameUnit ->
                     when (gameUnit) {
                         is GameUnitBallData -> GameUnitBallDisplay(gameUnit)

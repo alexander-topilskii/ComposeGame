@@ -2,7 +2,6 @@ package com.jazzy.mycomposegame.database
 
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 
-
 // Repository entity
 data class GameEntity(
     val id: String,

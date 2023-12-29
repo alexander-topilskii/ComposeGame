@@ -2,6 +2,7 @@ package com.jazzy.mycomposegame
 
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.jazzy.mycomposegame.domain.data.GameUnit
 import dev.romainguy.kotlin.math.Float2
 import kotlin.math.PI
 import kotlin.math.atan2
@@ -9,9 +10,6 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
 
-
-val GameObject.xOffset: Dp get() = position.x.dp
-val GameObject.yOffset: Dp get() = position.y.dp
 
 val GameUnit.xOffset: Dp get() = position.x.dp
 val GameUnit.yOffset: Dp get() = position.y.dp
