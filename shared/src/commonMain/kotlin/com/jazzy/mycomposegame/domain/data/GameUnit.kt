@@ -1,8 +1,5 @@
 package com.jazzy.mycomposegame.domain.data
 
-import com.jazzy.mycomposegame.rotate
-import dev.romainguy.kotlin.math.Float2
-
 abstract class GameUnit {
     abstract val speed: Float
     abstract val angle: Float

@@ -20,3 +20,12 @@ data class BoxData(
     val color: Color = Color.Red,
 ) : GameUnit()
 
+data class RectangleData(
+    override val speed: Float,
+    override val angle: Float,
+    override val position: PointF,
+    override val size: Float,
+    val sizeY: Float,
+    override val isEnabled: Boolean = true,
+    val color: Color = Color.Red,
+) : GameUnit()
