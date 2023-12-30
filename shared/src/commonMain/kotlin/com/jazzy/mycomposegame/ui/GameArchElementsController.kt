@@ -1,5 +1,6 @@
 package com.jazzy.mycomposegame.ui
 
+import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.unit.Dp
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.states
@@ -38,6 +39,10 @@ class GameArchElementsController(
 
     fun onDensityChanged(width: Dp, height: Dp) {
         gameStore.accept(GameStore.Intent.ChangeDensity(width, height))
+    }
+
+    fun onKeyEvent(keyEvent: KeyEvent) {
+        gameStore.accept(GameStore.Intent.KeyPressed(keyEvent))
     }
 }
 

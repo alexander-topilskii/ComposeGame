@@ -10,6 +10,8 @@ import com.jazzy.mycomposegame.database.GameDatabase
 import com.jazzy.mycomposegame.domain.ExecutorImpl
 import com.jazzy.mycomposegame.domain.GameStore
 import com.jazzy.mycomposegame.domain.ReducerImpl
+import com.jazzy.mycomposegame.domain.data.PlayerData
+import dev.romainguy.kotlin.math.Float2
 import kotlin.coroutines.CoroutineContext
 
 internal class GameStoreFactory(
@@ -21,26 +23,30 @@ internal class GameStoreFactory(
 ) {
 
     fun create(): GameStore =
-        object : GameStore, Store<GameStore.Intent, GameStore.State, Nothing> by storeFactory.create(
-            name = "GameStore",
-            initialState = GameStore.State(),
-            bootstrapper = SimpleBootstrapper(Action.Init(screenSize.first, screenSize.second)),
-            executorFactory = { ExecutorImpl(database, mainContext, ioContext) },
-            reducer = ReducerImpl,
-        ) {
+        object : GameStore,
+            Store<GameStore.Intent, GameStore.State, Nothing> by storeFactory.create(
+                name = "GameStore",
+                initialState = GameStore.State(),
+                bootstrapper = SimpleBootstrapper(Action.Init(screenSize.first, screenSize.second)),
+                executorFactory = { ExecutorImpl(database, mainContext, ioContext) },
+                reducer = ReducerImpl,
+            ) {
 
         }
 
     sealed interface Action : JvmSerializable {
         data class Init(val width: Dp, val height: Dp) : Action
         data class TimerUpdated(val dt: Float) : Action
+        object PlayerMovementRight : Action
+        object PlayerMovementLeft : Action
     }
 
     sealed interface Msg : JvmSerializable {
-        data class ChangeScreenParams(val width: Dp, val height: Dp): Msg
-        data class ChangeTitleText(val newText: String): Msg
-        data class GameUnitCreated(val gameUnit: GameUnit): Msg
-        data class GameUnitsUpdated(val gameUnits: List<GameUnit>): Msg
+        data class ChangeScreenParams(val width: Dp, val height: Dp) : Msg
+        data class ChangeTitleText(val newText: String) : Msg
+        data class GameUnitCreated(val gameUnit: GameUnit) : Msg
+        data class GameUnitsUpdated(val gameUnits: List<GameUnit>) : Msg
+        data class PlayerUpdated(val player: PlayerData?) : Msg
     }
 }
 

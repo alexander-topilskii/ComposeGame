@@ -17,8 +17,7 @@ internal object ReducerImpl : Reducer<GameStore.State, GameStoreFactory.Msg> {
                     height = msg.height
                 )
             )
-            is GameStoreFactory.Msg.GameUnitsUpdated -> {
-                copy(gameUnits = msg.gameUnits)
-            }
+            is GameStoreFactory.Msg.GameUnitsUpdated -> copy(gameUnits = msg.gameUnits)
+            is GameStoreFactory.Msg.PlayerUpdated -> copy(playerData = msg.player)
         }
 }

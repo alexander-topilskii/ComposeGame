@@ -6,6 +6,8 @@ import com.jazzy.mycomposegame.database.GameDatabase
 import com.jazzy.mycomposegame.domain.GameStore.Intent
 import com.jazzy.mycomposegame.domain.GameStore.State
 import com.jazzy.mycomposegame.domain.data.GameUnitBallData
+import com.jazzy.mycomposegame.domain.data.PlayerData
+import com.jazzy.mycomposegame.input.KeyHandler
 import com.jazzy.mycomposegame.random
 import com.jazzy.mycomposegame.ui.GameStoreFactory.Action
 import com.jazzy.mycomposegame.ui.GameStoreFactory.Msg
@@ -23,15 +25,52 @@ internal class ExecutorImpl(
         when (action) {
             is Action.Init -> init(action.width, action.height)
             is Action.TimerUpdated -> {
-                val newGameUnits =
-                    Updater.getUpdatedUnits(action.dt, state().gameUnits, state().screenSize)
+                GameUnitUpdater.updatePlayer(
+                    action.dt,
+                    state().playerData,
+                    state().screenSize
+                ) { player ->
+                    dispatchOnMain(Msg.PlayerUpdated(player))
+                }
+
+                val newGameUnits = GameUnitUpdater.getUpdatedUnits(
+                    action.dt,
+                    state().gameUnits,
+                    state().screenSize
+                )
+
+
                 dispatchOnMain(Msg.GameUnitsUpdated(newGameUnits))
+            }
+
+            is Action.PlayerMovementRight -> {
+                GameUnitUpdater.movePlayerToRight(state().playerData) { newPlayer ->
+                    dispatchOnMain(Msg.PlayerUpdated(newPlayer))
+                }
+            }
+
+            is Action.PlayerMovementLeft -> {
+                GameUnitUpdater.movePlayerToLeft(state().playerData) { newPlayer ->
+                    dispatchOnMain(Msg.PlayerUpdated(newPlayer))
+                }
             }
         }
     }
 
     private suspend fun init(width: Dp, height: Dp) {
         dispatchOnMain(Msg.ChangeScreenParams(width = width, height = height))
+
+        dispatchOnMain(
+            Msg.PlayerUpdated(
+                PlayerData(
+                    size = 20f,
+                    color = Color.Red,
+                    position = Float2(10f, 10f),
+                    speed = 0f,
+                    angle = 0f
+                )
+            )
+        )
 
         repeat(1000) {
             val ball = GameUnitBallData(
@@ -56,10 +95,15 @@ internal class ExecutorImpl(
                 )
             )
 
-            is Intent.TimerUpdate -> Updater.update(intent.time) {
+            is Intent.TimerUpdate -> TimeToDtUpdater.update(intent.time) {
                 scope.launch(mainContext) { forward(Action.TimerUpdated(it)) }
             }
 
+            is Intent.KeyPressed -> KeyHandler.onKeyPressed(
+                intent.keyEvent,
+                onMoveRight = { forwardOnMain(Action.PlayerMovementRight) },
+                onMoveLeft = { forwardOnMain(Action.PlayerMovementLeft) }
+            )
         }
     }
 }

@@ -1,25 +1,15 @@
 package com.jazzy.mycomposegame.domain
 
 import androidx.compose.ui.unit.dp
-import com.jazzy.mycomposegame.domain.data.GameUnit
 import com.jazzy.mycomposegame.angle
+import com.jazzy.mycomposegame.domain.GameUnitUpdater.getUpdatedBallData
+import com.jazzy.mycomposegame.domain.data.GameUnit
 import com.jazzy.mycomposegame.domain.data.GameUnitBallData
+import com.jazzy.mycomposegame.domain.data.PlayerData
 import dev.romainguy.kotlin.math.Float2
 import dev.romainguy.kotlin.math.length
 
-object Updater {
-    private var totalTime = 0L
-    private var prevTime = 0L
-
-    fun update(time: Long, onTic: (Float)-> Unit) {
-        val delta = time - prevTime
-        val floatDelta = (delta / 1E8).toFloat()
-        prevTime = time
-
-        onTic.invoke(floatDelta)
-
-        totalTime += delta
-    }
+object GameUnitUpdater {
 
     fun getUpdatedUnits(
         dt: Float,
@@ -33,6 +23,25 @@ object Updater {
             }
         }
     }
+
+    suspend fun movePlayerToRight(player: PlayerData?, action: suspend (PlayerData?) -> Unit) {
+        if (player == null) action.invoke(null)
+        else {
+            action.invoke(
+                player.copy(angle = 0f, speed = player.speed + 1f)
+            )
+        }
+    }
+
+    suspend fun movePlayerToLeft(player: PlayerData?, action: suspend (PlayerData?) -> Unit) {
+        if (player == null) action.invoke(null)
+        else {
+            action.invoke(
+                player.copy(angle = 180f, speed = player.speed + 1f)
+            )
+        }
+    }
+
 
     private fun GameUnitBallData.getUpdatedBallData(
         floatDelta: Float,
@@ -71,10 +80,27 @@ object Updater {
                 screenSize.height.value - size
         }
 
-        return copy(
+        return copy( // TODO: заменить на отправку новых парамтеров. copy только в редьюсере
             speed = newSpeed,
             angle = newAngle,
             position = Float2(newPosX, newPosY)
         )
+    }
+
+    suspend fun updatePlayer(
+        dt: Float,
+        playerData: PlayerData?,
+        screenSize: ScreenSize,
+        onPlayerChanged: suspend (PlayerData?) -> Unit
+    ) {
+        if (playerData == null) {
+            onPlayerChanged.invoke(null)
+            return
+        }
+
+        val velocity = playerData.movementVector.times(dt)
+        val newPosition = playerData.position.plus(velocity)
+
+        onPlayerChanged.invoke(playerData.copy(position = newPosition))
     }
 }

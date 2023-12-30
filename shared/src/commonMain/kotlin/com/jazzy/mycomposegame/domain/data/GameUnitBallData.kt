@@ -11,3 +11,12 @@ data class GameUnitBallData(
     override val isEnabled: Boolean = true,
     val color: Color = Color.Red,
 ) : GameUnit()
+
+data class PlayerData(
+    override val speed: Float,
+    override val angle: Float,
+    override val position: Float2,
+    override val size: Float,
+    override val isEnabled: Boolean = true,
+    val color: Color = Color.Red,
+) : GameUnit()

@@ -32,4 +32,8 @@ internal abstract class BasicExecutorImpl<in Intent : Any, Action : Any, State :
             dispatch(msg)
         }
     }
+
+    suspend fun forwardOnMain(action: Action) {
+        withContext(mainContext) { forward(action) }
+    }
 }

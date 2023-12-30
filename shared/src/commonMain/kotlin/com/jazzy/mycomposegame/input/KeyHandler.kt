@@ -7,16 +7,18 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 
-class KeyHandler {
-    var onMoveUp: () -> Unit = {}
-    var onMoveDown: () -> Unit = {}
-    var onMoveLeft: () -> Unit = {}
-    var onMoveRight: () -> Unit = {}
-    var onSpace: () -> Unit = {}
-    var onCtrl: () -> Unit = {}
-    var onShift: () -> Unit = {}
+object KeyHandler {
 
-    fun onKeyPressed(event: KeyEvent): Boolean {
+    suspend fun onKeyPressed(
+        event: KeyEvent,
+        onMoveUp: suspend () -> Unit = {},
+        onMoveDown: suspend () -> Unit = {},
+        onMoveLeft: suspend () -> Unit = {},
+        onMoveRight: suspend () -> Unit = {},
+        onSpace: suspend () -> Unit = {},
+        onCtrl: suspend () -> Unit = {},
+        onShift: suspend () -> Unit = {}
+    ): Boolean {
         when (event.key) {
             Key.DirectionUp, Key.W -> onMoveUp()
             Key.DirectionDown, Key.S -> onMoveDown()

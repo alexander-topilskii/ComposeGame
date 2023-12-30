@@ -18,6 +18,7 @@ import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
@@ -25,7 +26,9 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.jazzy.mycomposegame.ui.display.GameUnitBallDisplay
 import com.jazzy.mycomposegame.database.GameDatabase
 import com.jazzy.mycomposegame.domain.data.GameUnitBallData
+import com.jazzy.mycomposegame.domain.data.PlayerData
 import com.jazzy.mycomposegame.getScreenSize
+import com.jazzy.mycomposegame.ui.display.PlayerDisplay
 import com.jazzy.mycomposegame.ui.display.display
 
 @Composable
@@ -56,7 +59,10 @@ fun MainGame(
 
     val states = controller.state.collectAsState(null)
 
-    Column {
+    Column(modifier = Modifier.onKeyEvent { keyEvent ->
+        controller.onKeyEvent(keyEvent)
+        return@onKeyEvent true
+    }) {
         states.value?.text?.display(controller)
 
         Button(
@@ -88,11 +94,16 @@ fun MainGame(
                         )
                     }
                 }) {
+
+
                 states.value?.gameUnits?.forEach { gameUnit ->
                     when (gameUnit) {
                         is GameUnitBallData -> GameUnitBallDisplay(gameUnit)
                     }
                 }
+
+                states.value?.playerData?.let { PlayerDisplay(it) }
+
             }
         }
     }
