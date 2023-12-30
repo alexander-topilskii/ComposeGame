@@ -13,13 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.jazzy.mycomposegame.domain.data.GameUnitBallData
+import com.jazzy.mycomposegame.domain.data.BallData
 import com.jazzy.mycomposegame.domain.data.PlayerData
 import com.jazzy.mycomposegame.xOffset
 import com.jazzy.mycomposegame.yOffset
 
 @Composable
-fun GameUnitBallDisplay(ballData: GameUnitBallData) {
+fun GameUnitBallDisplay(ballData: BallData) {
     val ballSize = ballData.size.dp
     Box(
         Modifier

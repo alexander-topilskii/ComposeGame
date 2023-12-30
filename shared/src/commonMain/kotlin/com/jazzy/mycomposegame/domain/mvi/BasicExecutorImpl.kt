@@ -1,4 +1,4 @@
-package com.jazzy.mycomposegame.domain
+package com.jazzy.mycomposegame.domain.mvi
 
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.jazzy.mycomposegame.ui.GameStoreFactory
@@ -34,6 +34,8 @@ internal abstract class BasicExecutorImpl<in Intent : Any, Action : Any, State :
     }
 
     suspend fun forwardOnMain(action: Action) {
-        withContext(mainContext) { forward(action) }
+        withContext(mainContext) {
+            forward(action)
+        }
     }
 }

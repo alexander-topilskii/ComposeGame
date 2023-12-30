@@ -1,4 +1,4 @@
-package com.jazzy.mycomposegame.domain
+package com.jazzy.mycomposegame.domain.mvi
 
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.unit.Dp

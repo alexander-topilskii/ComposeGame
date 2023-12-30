@@ -2,48 +2,33 @@ package com.jazzy.mycomposegame.domain
 
 import androidx.compose.ui.unit.dp
 import com.jazzy.mycomposegame.angle
-import com.jazzy.mycomposegame.domain.GameUnitUpdater.getUpdatedBallData
+import com.jazzy.mycomposegame.domain.data.BallData
 import com.jazzy.mycomposegame.domain.data.GameUnit
-import com.jazzy.mycomposegame.domain.data.GameUnitBallData
 import com.jazzy.mycomposegame.domain.data.PlayerData
+import com.jazzy.mycomposegame.domain.mvi.ScreenSize
+import com.jazzy.mycomposegame.ui.GameStoreFactory
 import dev.romainguy.kotlin.math.Float2
 import dev.romainguy.kotlin.math.length
 
 object GameUnitUpdater {
 
-    fun getUpdatedUnits(
+    suspend fun getUpdatedUnits(
         dt: Float,
         gameUnits: List<GameUnit>,
-        screenSize: ScreenSize
-    ): List<GameUnit> {
-        return gameUnits.map { gu ->
+        screenSize: ScreenSize,
+        onMsg: suspend (GameStoreFactory.Msg) -> Unit
+    ) {
+        val newGameUnits = gameUnits.map { gu ->
             return@map when (gu) {
-                is GameUnitBallData -> gu.getUpdatedBallData(dt, screenSize)
+                is BallData -> gu.getUpdatedBallData(dt, screenSize)
                 else -> gu
             }
         }
-    }
-
-    suspend fun movePlayerToRight(player: PlayerData?, action: suspend (PlayerData?) -> Unit) {
-        if (player == null) action.invoke(null)
-        else {
-            action.invoke(
-                player.copy(angle = 0f, speed = player.speed + 1f)
-            )
-        }
-    }
-
-    suspend fun movePlayerToLeft(player: PlayerData?, action: suspend (PlayerData?) -> Unit) {
-        if (player == null) action.invoke(null)
-        else {
-            action.invoke(
-                player.copy(angle = 180f, speed = player.speed + 1f)
-            )
-        }
+        onMsg.invoke(GameStoreFactory.Msg.GameUnitsUpdated(newGameUnits))
     }
 
 
-    private fun GameUnitBallData.getUpdatedBallData(
+    private fun BallData.getUpdatedBallData(
         floatDelta: Float,
         screenSize: ScreenSize
     ): GameUnit {
@@ -91,16 +76,14 @@ object GameUnitUpdater {
         dt: Float,
         playerData: PlayerData?,
         screenSize: ScreenSize,
-        onPlayerChanged: suspend (PlayerData?) -> Unit
+        onMsg: suspend (GameStoreFactory.Msg) -> Unit
     ) {
-        if (playerData == null) {
-            onPlayerChanged.invoke(null)
-            return
-        }
+        if (playerData == null) return
 
         val velocity = playerData.movementVector.times(dt)
         val newPosition = playerData.position.plus(velocity)
 
-        onPlayerChanged.invoke(playerData.copy(position = newPosition))
+        onMsg.invoke(GameStoreFactory.Msg.PlayerUpdated(playerData.copy(position = newPosition)))
     }
 }
+

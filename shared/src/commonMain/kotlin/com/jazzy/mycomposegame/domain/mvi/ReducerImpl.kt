@@ -1,4 +1,4 @@
-package com.jazzy.mycomposegame.domain
+package com.jazzy.mycomposegame.domain.mvi
 
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.jazzy.mycomposegame.ui.GameStoreFactory

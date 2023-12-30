@@ -5,7 +5,7 @@ import androidx.compose.ui.unit.Dp
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.states
 import com.jazzy.mycomposegame.database.GameDatabase
-import com.jazzy.mycomposegame.domain.GameStore
+import com.jazzy.mycomposegame.domain.mvi.GameStore
 import kotlinx.coroutines.flow.Flow
 
 class GameArchElementsController(

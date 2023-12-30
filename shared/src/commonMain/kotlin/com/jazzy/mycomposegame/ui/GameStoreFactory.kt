@@ -7,14 +7,13 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.jazzy.mycomposegame.domain.data.GameUnit
 import com.jazzy.mycomposegame.database.GameDatabase
-import com.jazzy.mycomposegame.domain.ExecutorImpl
-import com.jazzy.mycomposegame.domain.GameStore
-import com.jazzy.mycomposegame.domain.ReducerImpl
+import com.jazzy.mycomposegame.domain.mvi.ExecutorImpl
+import com.jazzy.mycomposegame.domain.mvi.GameStore
+import com.jazzy.mycomposegame.domain.mvi.ReducerImpl
 import com.jazzy.mycomposegame.domain.data.PlayerData
-import dev.romainguy.kotlin.math.Float2
 import kotlin.coroutines.CoroutineContext
 
-internal class GameStoreFactory(
+class GameStoreFactory(
     private val storeFactory: StoreFactory,
     private val database: GameDatabase<Any>,
     private val mainContext: CoroutineContext,
