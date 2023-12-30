@@ -6,7 +6,7 @@ import dev.romainguy.kotlin.math.Float2
 data class PlayerData(
     override val speed: Float,
     override val angle: Float,
-    override val position: Float2,
+    override val position: PointF,
     override val size: Float,
     override val isEnabled: Boolean = true,
     val color: Color = Color.Red,

@@ -21,6 +21,7 @@ interface GameStore : Store<GameStore.Intent, GameStore.State, Nothing> {
         val text: String = "Text",
         val screenSize: ScreenSize = ScreenSize(),
         val gameUnits: List<GameUnit> = emptyList(),
+        val backgroundUnits: List<GameUnit> = emptyList(),
         val playerData: PlayerData? = null,
     ) : JvmSerializable
 }

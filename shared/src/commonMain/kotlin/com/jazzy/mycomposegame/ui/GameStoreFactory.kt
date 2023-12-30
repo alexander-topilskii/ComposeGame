@@ -44,6 +44,7 @@ class GameStoreFactory(
         data class ChangeScreenParams(val width: Dp, val height: Dp) : Msg
         data class ChangeTitleText(val newText: String) : Msg
         data class GameUnitCreated(val gameUnit: GameUnit) : Msg
+        data class BackgroundUnitCreated(val backgroundUnit: GameUnit) : Msg
         data class GameUnitsUpdated(val gameUnits: List<GameUnit>) : Msg
         data class PlayerUpdated(val player: PlayerData?) : Msg
     }

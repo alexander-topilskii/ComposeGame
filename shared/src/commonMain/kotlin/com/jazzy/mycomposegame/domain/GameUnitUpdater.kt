@@ -5,6 +5,9 @@ import com.jazzy.mycomposegame.angle
 import com.jazzy.mycomposegame.domain.data.BallData
 import com.jazzy.mycomposegame.domain.data.GameUnit
 import com.jazzy.mycomposegame.domain.data.PlayerData
+import com.jazzy.mycomposegame.domain.data.PointF
+import com.jazzy.mycomposegame.domain.data.angle
+import com.jazzy.mycomposegame.domain.data.length
 import com.jazzy.mycomposegame.domain.mvi.ScreenSize
 import com.jazzy.mycomposegame.ui.GameStoreFactory
 import dev.romainguy.kotlin.math.Float2
@@ -46,7 +49,7 @@ object GameUnitUpdater {
         val yOffset = newPosition.y.dp
 
         if (xOffset > screenSize.width - size.dp || xOffset < 0.dp) {
-            val movementVector = movementVector.times(Float2(-1f, 1f))
+            val movementVector: PointF = movementVector.times(PointF(-1f, 1f))
 
             newSpeed = length(movementVector)
             newAngle = movementVector.angle()
@@ -55,7 +58,7 @@ object GameUnitUpdater {
             if (xOffset > screenSize.width - size.dp) newPosX =
                 screenSize.width.value - size
         } else if (yOffset > screenSize.height - size.dp || yOffset < 0.dp) {
-            val movementVector = movementVector.times(Float2(1f, -1f))
+            val movementVector = movementVector.times(PointF(1f, -1f))
 
             newSpeed = length(movementVector)
             newAngle = movementVector.angle()
@@ -68,7 +71,7 @@ object GameUnitUpdater {
         return copy( // TODO: заменить на отправку новых парамтеров. copy только в редьюсере
             speed = newSpeed,
             angle = newAngle,
-            position = Float2(newPosX, newPosY)
+            position = PointF(newPosX, newPosY)
         )
     }
 
