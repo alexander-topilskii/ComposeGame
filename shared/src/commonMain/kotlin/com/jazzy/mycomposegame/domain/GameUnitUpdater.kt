@@ -1,7 +1,6 @@
 package com.jazzy.mycomposegame.domain
 
 import androidx.compose.ui.unit.dp
-import com.jazzy.mycomposegame.angle
 import com.jazzy.mycomposegame.domain.data.BallData
 import com.jazzy.mycomposegame.domain.data.GameUnit
 import com.jazzy.mycomposegame.domain.data.PlayerData
@@ -10,8 +9,6 @@ import com.jazzy.mycomposegame.domain.data.angle
 import com.jazzy.mycomposegame.domain.data.length
 import com.jazzy.mycomposegame.domain.mvi.ScreenSize
 import com.jazzy.mycomposegame.ui.GameStoreFactory
-import dev.romainguy.kotlin.math.Float2
-import dev.romainguy.kotlin.math.length
 
 object GameUnitUpdater {
 
@@ -86,7 +83,7 @@ object GameUnitUpdater {
         val velocity = playerData.movementVector.times(dt)
         val newPosition = playerData.position.plus(velocity)
 
-        onMsg.invoke(GameStoreFactory.Msg.PlayerUpdated(playerData.copy(position = newPosition)))
+        onMsg.invoke(GameStoreFactory.Msg.PlayerPositionUpdated(newPosition))
     }
 }
 

@@ -12,11 +12,9 @@ object PlayerMovementController {
         if (player == null) return
         else {
             action.invoke(
-                GameStoreFactory.Msg.PlayerUpdated(
-                    player.copy(
-                        angle = 0f,
-                        speed = player.speed + 1f
-                    )
+                GameStoreFactory.Msg.PlayerMovementUpdated(
+                    angle = 0f,
+                    speed = player.speed + 1f
                 )
             )
         }
@@ -29,8 +27,9 @@ object PlayerMovementController {
         if (player == null) return
         else {
             action.invoke(
-                GameStoreFactory.Msg.PlayerUpdated(
-                    player.copy(angle = 180f, speed = player.speed + 1f)
+                GameStoreFactory.Msg.PlayerMovementUpdated(
+                    angle = 180f,
+                    speed = player.speed + 1f
                 )
             )
         }

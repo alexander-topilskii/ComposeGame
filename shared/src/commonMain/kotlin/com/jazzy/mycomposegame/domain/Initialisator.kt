@@ -12,10 +12,36 @@ import com.jazzy.mycomposegame.ui.GameStoreFactory
 internal object Initialisator {
 
     suspend fun init(width: Dp, height: Dp, onMsg: suspend (GameStoreFactory.Msg) -> Unit) {
-        onMsg(GameStoreFactory.Msg.ChangeScreenParams(width = width, height = height))
+        initScreenSize(onMsg, width, height)
+        initPlayer(onMsg)
+        initBalls(onMsg)
+        initFloor(onMsg)
+    }
 
+    private suspend fun initFloor(onMsg: suspend (GameStoreFactory.Msg) -> Unit) {
+        val rectangle = RectangleData(
+            size = 1000f,
+            sizeY = 25f,
+            color = Color.Green,
+            position = PointF(-10f, 100f),
+            speed = random(0, 8) + 16f,
+            angle = random(0, 15) + 30f
+        )
+
+        onMsg(GameStoreFactory.Msg.BackgroundUnitCreated(rectangle))
+    }
+
+    private suspend fun initScreenSize(
+        onMsg: suspend (GameStoreFactory.Msg) -> Unit,
+        width: Dp,
+        height: Dp
+    ) {
+        onMsg(GameStoreFactory.Msg.ChangeScreenParams(width = width, height = height))
+    }
+
+    private suspend fun initPlayer(onMsg: suspend (GameStoreFactory.Msg) -> Unit) {
         onMsg(
-            GameStoreFactory.Msg.PlayerUpdated(
+            GameStoreFactory.Msg.PlayerCreated(
                 PlayerData(
                     size = 20f,
                     color = Color.Red,
@@ -25,7 +51,9 @@ internal object Initialisator {
                 )
             )
         )
+    }
 
+    private suspend fun initBalls(onMsg: suspend (GameStoreFactory.Msg) -> Unit) {
         repeat(0) {
             val ball = BallData(
                 size = random(25, 45),
@@ -37,16 +65,5 @@ internal object Initialisator {
 
             onMsg(GameStoreFactory.Msg.GameUnitCreated(ball))
         }
-
-        val rectangle = RectangleData(
-            size = 1000f,
-            sizeY = 25f,
-            color = Color.Green,
-            position = PointF(-10f, 100f),
-            speed = random(0, 8) + 16f,
-            angle = random(0, 15) + 30f
-        )
-
-        onMsg(GameStoreFactory.Msg.BackgroundUnitCreated(rectangle))
     }
 }
