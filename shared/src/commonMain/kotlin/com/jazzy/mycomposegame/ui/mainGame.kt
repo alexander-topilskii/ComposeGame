@@ -39,7 +39,7 @@ fun MainGame(
     val screenSize = getScreenSize()
 
     val controller = remember {
-        GameArchElementsController(
+        GameController(
             storeFactory = storeFactory,
             database = database,
             screenSize = with(density) { screenSize.first.toDp() to screenSize.second.toDp() },
@@ -64,7 +64,7 @@ fun MainGame(
         states.value?.text?.display(controller)
 
         Button(
-            onClick = { controller.onButtonClicked() }
+            onClick = {  }
         ) {
             Text("Submit")
         }

@@ -7,7 +7,9 @@ object TimeToDtUpdater {
     private var prevTime = 0L
 
     suspend fun update(time: Long, onTic: suspend (GameStoreFactory.Action) -> Unit) {
-        val delta = time - prevTime
+        val delta = if (prevTime == 0L) 0
+        else time - prevTime
+
         val floatDelta = (delta / 1E8).toFloat()
         prevTime = time
 

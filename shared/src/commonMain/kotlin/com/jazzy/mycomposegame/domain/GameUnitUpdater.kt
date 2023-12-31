@@ -24,7 +24,10 @@ object GameUnitUpdater {
                 else -> gu
             }
         }
-        onMsg.invoke(GameStoreFactory.Msg.GameUnitsUpdated(newGameUnits))
+
+        if (newGameUnits.isNotEmpty()) {
+            onMsg.invoke(GameStoreFactory.Msg.GameUnitsUpdated(newGameUnits))
+        }
     }
 
 
@@ -75,15 +78,20 @@ object GameUnitUpdater {
     suspend fun updatePlayer(
         dt: Float,
         playerData: PlayerData?,
-        screenSize: ScreenSize,
         onMsg: suspend (GameStoreFactory.Msg) -> Unit
     ) {
         if (playerData == null) return
 
         val velocity = playerData.movementVector.times(dt)
         val newPosition = playerData.position.plus(velocity)
-
-        onMsg.invoke(GameStoreFactory.Msg.PlayerPositionUpdated(newPosition))
+        val ylim = 300f
+        if (newPosition.y > ylim) {
+            onMsg.invoke(GameStoreFactory.Msg.PlayerPositionUpdated(newPosition.copy(y = ylim)))
+        } else if (newPosition.y < -ylim) {
+            onMsg.invoke(GameStoreFactory.Msg.PlayerPositionUpdated(newPosition.copy(y = -ylim)))
+        } else {
+            onMsg.invoke(GameStoreFactory.Msg.PlayerPositionUpdated(newPosition))
+        }
     }
 }
 
